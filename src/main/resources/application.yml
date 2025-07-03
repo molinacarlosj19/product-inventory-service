@@ -1,0 +1,9 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://admin:830701@cluster0.wyqevht.mongodb.net/product-inventory?retryWrites=true&w=majority&appName=Cluster0
+  application:
+    name: product-inventory-service
+
+server:
+  port: 8080
