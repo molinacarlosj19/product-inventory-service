@@ -1,0 +1,9 @@
+spring:
+  data:
+    mongodb:
+      uri: ***REMOVED***
+  application:
+    name: product-inventory-service
+
+server:
+  port: 8080
