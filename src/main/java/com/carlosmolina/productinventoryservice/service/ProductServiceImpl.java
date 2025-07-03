@@ -4,7 +4,9 @@ import com.carlosmolina.productinventoryservice.dto.ProductDTO;
 import com.carlosmolina.productinventoryservice.mapper.ProductMapper;
 import com.carlosmolina.productinventoryservice.model.Product;
 import com.carlosmolina.productinventoryservice.repository.ProductRepository;
+import com.carlosmolina.productinventoryservice.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO getProductById(String id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourseNotFoundException("Product not found") );
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found") );
         return productMapper.productToProductDTO(product);
     }
 
@@ -40,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO updateProduct(String id, ProductDTO productDTO) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourseNotFoundException("Product not found") );
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found") );
 
         product.setCode(productDTO.getCode());
         product.setName(productDTO.getName());

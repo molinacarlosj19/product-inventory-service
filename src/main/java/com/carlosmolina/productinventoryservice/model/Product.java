@@ -67,7 +67,7 @@ public class Product {
         this.price = price;
     }
 
-    public LocalDateTime getExpirationDate() {
+    public LocalDate getExpirationDate() {
         return expirationDate;
     }
 
