@@ -101,6 +101,6 @@ public class ProductServiceImplTest {
     @Test
     void testDeleteProduct() {
         productService.deleteProduct("1");
-        verify(repository).deleteById("1");
+        verify(productRepository).deleteById("1");
     }
 }
