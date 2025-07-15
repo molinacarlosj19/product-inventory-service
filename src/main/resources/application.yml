@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb+srv://admin:9Q3rDAoqbeLu30IO@cluster0.wyqevht.mongodb.net/product-inventory?retryWrites=true&w=majority&appName=Cluster0
+      uri: ${MONGODB_URI}
   application:
     name: product-inventory-service
 
