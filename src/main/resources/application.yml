@@ -1,9 +1,5 @@
 spring:
-  data:
-    mongodb:
-      uri: ${MONGODB_URI}
-  application:
-    name: product-inventory-service
-
-server:
-  port: 8080
+  profiles:
+    active: dev
+jwt:
+  secret: u7m0PddpQ24Oiw7kqrxmVjWm0trqHjHItRZ4fxJ6kibQ0X+U5YaPlDgfq8pZk3mEiK+1A3KUB0eA1HK4MNGw6A==
