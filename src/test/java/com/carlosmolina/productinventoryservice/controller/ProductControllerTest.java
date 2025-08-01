@@ -1,45 +1,67 @@
 package com.carlosmolina.productinventoryservice.controller;
 
-import com.carlosmolina.productinventoryservice.ProductInventoryServiceApplication;
-import com.carlosmolina.productinventoryservice.model.Product;
-import com.carlosmolina.productinventoryservice.repository.ProductRepository;
+import com.carlosmolina.productinventoryservice.dto.ProductDTO;
+import com.carlosmolina.productinventoryservice.service.ProductService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.Mockito;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.math.BigDecimal;
 
-@SpringBootTest(classes = ProductInventoryServiceApplication.class)
-@AutoConfigureMockMvc
-@ActiveProfiles("test") // Usar configuración de test
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest(ProductController.class)
+@ActiveProfiles("test")
 class ProductControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    private static final ProductService productServiceMock = Mockito.mock(ProductService.class);
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final MockMvc mockMvc;
+    private final ObjectMapper objectMapper;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    ProductControllerTest(MockMvc mockMvc, ObjectMapper objectMapper) {
+        this.mockMvc = mockMvc;
+        this.objectMapper = objectMapper;
+    }
+
+    @BeforeEach
+    void setUp() {
+        ProductDTO productDto = new ProductDTO();
+        productDto.setCode("P001");
+        productDto.setName("Mock Product");
+        productDto.setPrice(new BigDecimal("200.00"));
+
+        when(productServiceMock.createProduct(any(ProductDTO.class))).thenReturn(productDto);
+    }
 
     @Test
     void testCreateProduct() throws Exception {
-        Product product = new Product();
-        product.setCode("P001");
-        product.setName("Test Product");
-        product.setPrice(BigDecimal.valueOf(100));
+        ProductDTO productDto = new ProductDTO();
+        productDto.setCode("P001");
+        productDto.setName("Mock Product");
+        productDto.setPrice(new BigDecimal("200.00"));
 
         mockMvc.perform(post("/api/products")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(product)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productDto)))
                 .andExpect(status().isCreated());
+    }
+
+    @TestConfiguration
+    static class TestConfig {
+        @Bean
+        public ProductService productService() {
+            return productServiceMock;
+        }
     }
 }

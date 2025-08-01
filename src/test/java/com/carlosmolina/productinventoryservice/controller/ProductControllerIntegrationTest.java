@@ -14,7 +14,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@ActiveProfiles("test") // Usar configuración de Mongo embebido
+@ActiveProfiles("test") // Usar Mongo embebido
 class ProductControllerIntegrationTest {
 
     @Autowired
@@ -28,13 +28,14 @@ class ProductControllerIntegrationTest {
     @Test
     void testSaveAndFindProducts() {
         Product product = new Product();
-        product.setName("Laptop");
-        product.setCode("LPT-001");
-        product.setPrice(new BigDecimal("1500.00"));
+        product.setCode("P001");
+        product.setName("Test Product");
+        product.setPrice(new BigDecimal("100.00"));
+
         productRepository.save(product);
 
         List<Product> products = productRepository.findAll();
         assertThat(products).hasSize(1);
-        assertThat(products.get(0).getName()).isEqualTo("Laptop");
+        assertThat(products.get(0).getName()).isEqualTo("Test Product");
     }
 }
