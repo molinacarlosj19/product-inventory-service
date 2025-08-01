@@ -1,12 +1,15 @@
-name: CD - Deploy to Azure on Master
+name: CI - Test on Development
 
 on:
   push:
     branches:
-      - master
+      - development
+  pull_request:
+    branches:
+      - development
 
 jobs:
-  build-test-deploy:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,13 +33,3 @@ jobs:
 
       - name: Run tests
         run: mvn clean test -Dspring.profiles.active=test
-
-      - name: Build for production
-        run: mvn package -DskipTests -Dspring.profiles.active=prod
-
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: product-inventory
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: target/*.jar
