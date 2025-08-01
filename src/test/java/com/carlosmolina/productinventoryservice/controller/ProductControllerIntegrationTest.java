@@ -14,28 +14,28 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@ActiveProfiles("test") // Usar Mongo embebido
+@ActiveProfiles("test")
 class ProductControllerIntegrationTest {
 
     @Autowired
     private ProductRepository productRepository;
 
     @BeforeEach
-    void setUp() {
+    void cleanDatabase() {
         productRepository.deleteAll();
     }
 
     @Test
-    void testSaveAndFindProducts() {
+    void testSaveAndRetrieveProduct() {
         Product product = new Product();
         product.setCode("P001");
-        product.setName("Test Product");
-        product.setPrice(new BigDecimal("100.00"));
+        product.setName("Integration Test Product");
+        product.setPrice(new BigDecimal("199.99"));
 
         productRepository.save(product);
 
         List<Product> products = productRepository.findAll();
         assertThat(products).hasSize(1);
-        assertThat(products.get(0).getName()).isEqualTo("Test Product");
+        assertThat(products.get(0).getName()).isEqualTo("Integration Test Product");
     }
 }

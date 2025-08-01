@@ -11,5 +11,4 @@ class ProductInventoryServiceApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }

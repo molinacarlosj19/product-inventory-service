@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -26,34 +27,32 @@ class ProductControllerTest {
 
     private static final ProductService productServiceMock = Mockito.mock(ProductService.class);
 
-    private final MockMvc mockMvc;
-    private final ObjectMapper objectMapper;
+    @Autowired
+    private MockMvc mockMvc;
 
-    ProductControllerTest(MockMvc mockMvc, ObjectMapper objectMapper) {
-        this.mockMvc = mockMvc;
-        this.objectMapper = objectMapper;
-    }
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @BeforeEach
-    void setUp() {
-        ProductDTO productDto = new ProductDTO();
-        productDto.setCode("P001");
-        productDto.setName("Mock Product");
-        productDto.setPrice(new BigDecimal("200.00"));
+    void setup() {
+        ProductDTO mockProduct = new ProductDTO();
+        mockProduct.setCode("P001");
+        mockProduct.setName("Mock Product");
+        mockProduct.setPrice(new BigDecimal("200.00"));
 
-        when(productServiceMock.createProduct(any(ProductDTO.class))).thenReturn(productDto);
+        when(productServiceMock.createProduct(any(ProductDTO.class))).thenReturn(mockProduct);
     }
 
     @Test
     void testCreateProduct() throws Exception {
-        ProductDTO productDto = new ProductDTO();
-        productDto.setCode("P001");
-        productDto.setName("Mock Product");
-        productDto.setPrice(new BigDecimal("200.00"));
+        ProductDTO requestProduct = new ProductDTO();
+        requestProduct.setCode("P001");
+        requestProduct.setName("Mock Product");
+        requestProduct.setPrice(new BigDecimal("200.00"));
 
         mockMvc.perform(post("/api/products")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(productDto)))
+                        .content(objectMapper.writeValueAsString(requestProduct)))
                 .andExpect(status().isCreated());
     }
 
